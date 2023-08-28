@@ -1,0 +1,8 @@
+fastapi
+python-multipart
+gunicorn
+uvicorn
+pytesseract
+SQLAlchemy
+psycopg2-binary
+python-multipart
