@@ -3,8 +3,17 @@ from fastapi.responses import JSONResponse
 from PIL import Image
 import pytesseract
 import re
-import string
 from datetime import datetime
+import psycopg2
+import datetime
+
+# Database connection parameters
+dbname = "my_db"
+user = "aniket"
+password = "Aniket!07"
+host = "localhost"
+port = "5432"  # Default PostgreSQL port is 5432
+
 
 app = FastAPI()
 
@@ -21,13 +30,13 @@ def fix_capitalization(text):
 def fix_ocr_errors(text):
     return text.replace('1', 'l').replace('3', 'e')
 
-def expand_abbreviations(text):
-    abbreviations = {
-        "USA": "United States of America"
-    }
-    for abbreviation, expansion in abbreviations.items():
-        text = text.replace(abbreviation, expansion)
-    return text
+# def expand_abbreviations(text):
+#     abbreviations = {
+#         "USA": "United States of America"
+#     }
+#     for abbreviation, expansion in abbreviations.items():
+#         text = text.replace(abbreviation, expansion)
+#     return text
 
 def remove_unwanted_line_breaks(text):
     return text.replace('\n', ' ').strip()
@@ -64,12 +73,31 @@ async def extract_text(file: UploadFile = File(...)):
         # Perform OCR using Tesseract
         extracted_text = pytesseract.image_to_string(img)
 
-
         # Clean the text
         cleaned_text = clean_text(extracted_text)
 
+        # Get the current timestamp
+        current_timestamp = datetime.datetime.now()
 
-        return JSONResponse(content={"extracted_text": cleaned_text})
+        formatted_timestamp = current_timestamp.strftime("%Y-%m-%d %H:%M:%S")
+
+        output = [(str(formatted_timestamp), str(cleaned_text))]
+        # Establish a connection to the PostgreSQL database
+        conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+        # Create a cursor
+        cur = conn.cursor()
+
+        # Iterate through the output and insert into the table
+        # for row in output:
+        for row in output:
+            cur.execute("INSERT INTO image_data (time_stamp, text_data) VALUES (%s, %s)", row)
+
+        # Commit the changes and close the cursor and connection
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return {"extracted text is uploaded to the database"}, 200
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
