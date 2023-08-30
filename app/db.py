@@ -4,7 +4,7 @@ import psycopg2
 # Database connection parameters
 dbname = "pgdatabase"
 user = "postgres"
-password = ""
+password = "Aniket!07"
 host = "database-2.caim22ddifvq.us-east-1.rds.amazonaws.com"
 port = "5432"  # Default PostgreSQL port is 5432
 
