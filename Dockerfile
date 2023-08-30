@@ -10,9 +10,6 @@ COPY ./requirements.txt /code/requirements.txt
 # 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-# Install pytesseract and required libraries
-RUN pip install pytesseract
-
 # 
 COPY ./app /code/app
 
