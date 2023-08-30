@@ -8,12 +8,11 @@ import psycopg2
 import datetime
 
 # Database connection parameters
-dbname = "my_db"
-user = "aniket"
+dbname = "pgdatabase"
+user = "postgres"
 password = "Aniket!07"
-host = "localhost"
+host = "database-2.caim22ddifvq.us-east-1.rds.amazonaws.com"
 port = "5432"  # Default PostgreSQL port is 5432
-
 
 app = FastAPI()
 
@@ -29,14 +28,6 @@ def fix_capitalization(text):
 
 def fix_ocr_errors(text):
     return text.replace('1', 'l').replace('3', 'e')
-
-# def expand_abbreviations(text):
-#     abbreviations = {
-#         "USA": "United States of America"
-#     }
-#     for abbreviation, expansion in abbreviations.items():
-#         text = text.replace(abbreviation, expansion)
-#     return text
 
 def remove_unwanted_line_breaks(text):
     return text.replace('\n', ' ').strip()
@@ -54,7 +45,6 @@ def clean_text(text):
     cleaned_text = remove_non_alphanumeric(cleaned_text)
     cleaned_text = fix_capitalization(cleaned_text)
     cleaned_text = fix_ocr_errors(cleaned_text)
-    #cleaned_text = expand_abbreviations(cleaned_text)
     cleaned_text = remove_unwanted_line_breaks(cleaned_text)
     cleaned_text = format_numbers_dates(cleaned_text)
     cleaned_text = remove_unwanted_characters(cleaned_text)
@@ -80,18 +70,20 @@ async def extract_text(file: UploadFile = File(...)):
         current_timestamp = datetime.datetime.now()
 
         formatted_timestamp = current_timestamp.strftime("%Y-%m-%d %H:%M:%S")
-
-        output = [(str(formatted_timestamp), str(cleaned_text))]
         
         # Establish a connection to the PostgreSQL database
         conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
         # Create a cursor
         cur = conn.cursor()
 
-        # Iterate through the output and insert into the table
-        # for row in output:
-        for row in output:
-            cur.execute("INSERT INTO image_data (time_stamp, text_data) VALUES (%s, %s)", row)
+        # Define the SQL query for insertion
+        insert_query = """
+        INSERT INTO image_data (data, time_stamp)
+        VALUES (%s, %s);
+        """
+
+        # Execute the insertion query with data
+        cur.execute(insert_query, (cleaned_text, formatted_timestamp))
 
         # Commit the changes and close the cursor and connection
         conn.commit()
