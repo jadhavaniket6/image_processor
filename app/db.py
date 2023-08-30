@@ -23,7 +23,7 @@ try:
 
     # Define the SQL query for insertion
     insert_query = """
-    INSERT INTO your_table_name (data, time_stamp)
+    INSERT INTO image_data (data, time_stamp)
     VALUES (%s, %s);
     """
 
