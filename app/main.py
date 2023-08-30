@@ -75,29 +75,31 @@ async def extract_text(file: UploadFile = File(...)):
 
         # Clean the text
         cleaned_text = clean_text(extracted_text)
+        return cleaned_text, 200
 
-        # Get the current timestamp
-        current_timestamp = datetime.datetime.now()
+        # # Get the current timestamp
+        # current_timestamp = datetime.datetime.now()
 
-        formatted_timestamp = current_timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        # formatted_timestamp = current_timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
-        output = [(str(formatted_timestamp), str(cleaned_text))]
-        # Establish a connection to the PostgreSQL database
-        conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
-        # Create a cursor
-        cur = conn.cursor()
+        # output = [(str(formatted_timestamp), str(cleaned_text))]
+        
+        # # Establish a connection to the PostgreSQL database
+        # conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+        # # Create a cursor
+        # cur = conn.cursor()
 
-        # Iterate through the output and insert into the table
+        # # Iterate through the output and insert into the table
+        # # for row in output:
         # for row in output:
-        for row in output:
-            cur.execute("INSERT INTO image_data (time_stamp, text_data) VALUES (%s, %s)", row)
+        #     cur.execute("INSERT INTO image_data (time_stamp, text_data) VALUES (%s, %s)", row)
 
-        # Commit the changes and close the cursor and connection
-        conn.commit()
-        cur.close()
-        conn.close()
+        # # Commit the changes and close the cursor and connection
+        # conn.commit()
+        # cur.close()
+        # conn.close()
 
-        return {"extracted text is uploaded to the database"}, 200
+        # return {"extracted text is uploaded to the database"}, 200
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
