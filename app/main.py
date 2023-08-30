@@ -52,7 +52,8 @@ def clean_text(text):
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {'''Hello World,
+            Welcome to the Image Scanner Application!'''}
 
 @app.post("/extract-text/")
 async def extract_text(file: UploadFile = File(...)):
@@ -73,6 +74,7 @@ async def extract_text(file: UploadFile = File(...)):
         
         # Establish a connection to the PostgreSQL database
         conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+        
         # Create a cursor
         cur = conn.cursor()
 
