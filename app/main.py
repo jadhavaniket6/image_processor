@@ -54,7 +54,7 @@ def clean_text(text):
     cleaned_text = remove_non_alphanumeric(cleaned_text)
     cleaned_text = fix_capitalization(cleaned_text)
     cleaned_text = fix_ocr_errors(cleaned_text)
-    cleaned_text = expand_abbreviations(cleaned_text)
+    #cleaned_text = expand_abbreviations(cleaned_text)
     cleaned_text = remove_unwanted_line_breaks(cleaned_text)
     cleaned_text = format_numbers_dates(cleaned_text)
     cleaned_text = remove_unwanted_characters(cleaned_text)
