@@ -32,12 +32,12 @@ try:
 
     # Commit the changes
     conn.commit()
+    # Close the cursor and connection
+    cur.close()
+    conn.close()
 
     print("Data inserted successfully!")
 
 except Exception as e:
     print("Error:", e)
-finally:
-    # Close the cursor and connection
-    cur.close()
-    conn.close()
+    
