@@ -18,4 +18,4 @@ RUN apt-get update && apt-get install -y tesseract-ocr
 RUN pip install pytesseract
 
 # 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "--proxy-headers", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
