@@ -8,10 +8,10 @@ import psycopg2
 import datetime
 
 # Database connection parameters
-dbname = "pgdatabase"
+dbname = ""
 user = "postgres"
-password = "Aniket!07"
-host = "database-2.caim22ddifvq.us-east-1.rds.amazonaws.com"
+password = ""
+host = ""
 port = "5432"  # Default PostgreSQL port is 5432
 
 app = FastAPI()
